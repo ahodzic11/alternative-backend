@@ -10,6 +10,8 @@ const config = require("./config");
 
 const { port, allowedDomains } = config;
 
+app.use(express.static(__dirname));
+
 app.use(cors());
 app.use(helmet());
 app.use(compression());
