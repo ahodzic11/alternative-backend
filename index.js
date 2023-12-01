@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 var cors = require("cors");
 const express = require("express");
 const helmet = require("helmet");
@@ -9,31 +10,32 @@ const config = require("./config");
 
 const { port, allowedDomains } = config;
 
-app.use(cors({ origin: allowedDomains }));
+app.use(cors());
 app.use(helmet());
 app.use(compression());
 
-const userRouter = require("./api/users/userRouter");
-const workshopRouter = require("./api/workshops/workshopRouter");
-const ativitiesRouter = require("./api/activities/activityRouter");
-const newsRouter = require("./api/news/newsRouter");
-const projectsRouter = require("./api/projects/projectRouter");
-const donatorsRouter = require("./api/donators/donatorsRouter");
-const offersRouter = require("./api/offers/offerRouter");
-const articleRouter = require("./api/articles/articleRouter");
-const reservationRouter = require("./api/reservations/reservationRouter");
-const questionRouter = require("./api/questions/questionRouter");
-const applicationRouter = require("./api/applications/applicationRouter");
+const userRouter = require("./routes/users/userRouter");
+const workshopRouter = require("./routes/workshops/workshopRouter");
+const ativitiesRouter = require("./routes/activities/activityRouter");
+const newsRouter = require("./routes/news/newsRouter");
+const projectsRouter = require("./routes/projects/projectRouter");
+const donatorsRouter = require("./routes/donators/donatorsRouter");
+const offersRouter = require("./routes/offers/offerRouter");
+const articleRouter = require("./routes/articles/articleRouter");
+const reservationRouter = require("./routes/reservations/reservationRouter");
+const questionRouter = require("./routes/questions/questionRouter");
+const applicationRouter = require("./routes/applications/applicationRouter");
 const fs = require("fs");
 const fileUpload = require("express-fileupload");
 const path = require("path");
-const e = require("cors");
 
-/*
-app.use(express.static(__dirname));
+//app.use(express.static('./../testna.nvo-alternative.org/static'));
+
+//app.use(express.static(path.join(__dirname, "./../testna.nvo-alternative.org/index.html")); //here is important thing - no static directory, because all static :)
+//app.use(express.static(path.join))
 app.use(express.json());
 app.use(fileUpload());
-*/
+
 app.use("/api/users", userRouter);
 app.use("/api/workshops", workshopRouter);
 app.use("/api/activities", ativitiesRouter);
@@ -46,17 +48,9 @@ app.use("/api/reservations", reservationRouter);
 app.use("/api/questions", questionRouter);
 app.use("/api/applications", applicationRouter);
 
-const pool = require("./config/database");
+//app.use(express.static('./../testna.nvo-alternative.org'));
 
-app.get("/", (req, res) => {
-  pool.query(`SELECT * FROM workshops`, [], (error, results, fields) => {
-    if (error) {
-      return res.send("Greška");
-    }
-    return res.send(results);
-  });
-});
-
+//app.use('/', express.static(path.join(__dirname + './../testna.nvo-alternative.org')))
 function formatPath(str) {
   var newString = str.trim().toLowerCase();
   var regexPattern = /\s+/g;
@@ -203,6 +197,10 @@ app.get("/galerija/", async (req, res) => {
     const slike = fs.readdirSync(testFolder2);
     res.json(slike);
   } catch (err) {}
+});
+
+app.get("/index.html", (req, res) => {
+  res.send("Hello, this is your index.html!");
 });
 
 app.listen(port, () => {
