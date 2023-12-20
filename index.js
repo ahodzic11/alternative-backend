@@ -186,7 +186,7 @@ app.delete("/deleteimage/galerija/:nazivSlike", (req, res) => {
 app.get("/:nazivFoldera/:naslov", async (req, res) => {
   const naslov = req.params.naslov;
   const nazivFoldera = req.params.nazivFoldera;
-  const testFolder2 = "./../backend/newuploads/" + nazivFoldera + "/" + naslov + "/";
+  const testFolder2 = "./newuploads/" + nazivFoldera + "/" + naslov + "/";
   try {
     const slike = fs.readdirSync(testFolder2);
     res.json(slike);
@@ -194,11 +194,22 @@ app.get("/:nazivFoldera/:naslov", async (req, res) => {
 });
 
 app.get("/galerija/", async (req, res) => {
-  const testFolder2 = "./../backend/newuploads/galerija/";
+  const testFolder2 = "./newuploads/galerija";
   try {
     const slike = fs.readdirSync(testFolder2);
     res.json(slike);
   } catch (err) {}
+});
+
+app.get("/statut/", async (req, res) => {
+  const file = "./newuploads/statut/Statut.pdf";
+  const data = fs.readFile(file, (err, data) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    res.json(data);
+  });
 });
 
 app.get("/index.html", (req, res) => {
